@@ -8,7 +8,6 @@ import com.cerner.bunsen.spark.SparkRowConverter;
 import com.cerner.bunsen.spark.codes.Hierarchies;
 import com.cerner.bunsen.spark.codes.systems.Loinc;
 import com.cerner.bunsen.spark.codes.systems.Snomed;
-import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -240,18 +239,18 @@ public class BroadcastableValueSetsTest {
             "http://hl7.org/fhir/ValueSet/v3-ActPriority")
         .build(spark, mockValueSets, Hierarchies.getDefault(spark));
 
-    Assert.assertTrue(ImmutableSet.of("bp", "leukocytes", "priorities", "types")
+    Assert.assertTrue(Set.of("bp", "leukocytes", "priorities", "types")
         .containsAll(valueSets.getReferenceNames()));
 
     Map<String,Set<String>> leukocyteValues = valueSets.getValues("leukocytes");
     Map<String,Set<String>> priorityValues = valueSets.getValues("priorities");
 
     Assert.assertTrue(leukocyteValues.containsKey("http://loinc.org"));
-    Assert.assertTrue(ImmutableSet.of("LP14419-3", "5821-4")
+    Assert.assertTrue(Set.of("LP14419-3", "5821-4")
         .containsAll(leukocyteValues.get("http://loinc.org")));
 
     Assert.assertTrue(priorityValues.containsKey("http://hl7.org/fhir/v3/ActPriority"));
-    Assert.assertTrue(ImmutableSet.of("EM")
+    Assert.assertTrue(Set.of("EM")
         .containsAll(priorityValues.get("http://hl7.org/fhir/v3/ActPriority")));
   }
 
@@ -321,18 +320,18 @@ public class BroadcastableValueSetsTest {
 
       Assert.assertNotNull(valueSets);
 
-      Assert.assertTrue(ImmutableSet.of(bp, leukocytes, priorities, "types")
+      Assert.assertTrue(Set.of(bp, leukocytes, priorities, "types")
           .containsAll(valueSets.getReferenceNames()));
 
       Map<String,Set<String>> leukocyteValues = valueSets.getValues(leukocytes);
       Map<String,Set<String>> priorityValues = valueSets.getValues(priorities);
 
       Assert.assertTrue(leukocyteValues.containsKey("http://loinc.org"));
-      Assert.assertTrue(ImmutableSet.of("LP14419-3", "5821-4")
+      Assert.assertTrue(Set.of("LP14419-3", "5821-4")
           .containsAll(leukocyteValues.get("http://loinc.org")));
 
       Assert.assertTrue(priorityValues.containsKey("http://hl7.org/fhir/v3/ActPriority"));
-      Assert.assertTrue(ImmutableSet.of("EM")
+      Assert.assertTrue(Set.of("EM")
           .containsAll(priorityValues.get("http://hl7.org/fhir/v3/ActPriority")));
     }
   }

@@ -1,11 +1,11 @@
 package com.cerner.bunsen.stu3.codes;
 
 import com.cerner.bunsen.spark.codes.Mapping;
-import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.SparkSession;
 import org.hl7.fhir.dstu3.model.ConceptMap;
@@ -283,7 +283,7 @@ public class ConceptMapsTest {
 
     Dataset<Mapping> latest = ConceptMaps.getFromDatabase(spark, database)
         .getLatestMappings(
-            ImmutableSet.of("urn:cerner:map:newmap",
+            Set.of("urn:cerner:map:newmap",
                 "urn:cerner:map:othermap"),
             true);
 
@@ -320,7 +320,7 @@ public class ConceptMapsTest {
     ConceptMaps conceptMaps = ConceptMaps.getFromDatabase(spark, database);
 
     Dataset<Mapping> latestWithExperimental = conceptMaps.getLatestMappings(
-        ImmutableSet.of("urn:cerner:map:expmap"),
+        Set.of("urn:cerner:map:expmap"),
         true);
 
     // We include experimental versions, so we should see that.
@@ -330,7 +330,7 @@ public class ConceptMapsTest {
             .count());
 
     Dataset<Mapping> latestWithoutExperimental = conceptMaps.getLatestMappings(
-        ImmutableSet.of("urn:cerner:map:expmap"),
+        Set.of("urn:cerner:map:expmap"),
         false);
 
     // Version 1 is not experimental, so we should see it.
@@ -341,7 +341,7 @@ public class ConceptMapsTest {
 
     // Loading a map with only experimental versions should find nothing.
     Dataset<Mapping> onlyExperimentalMaps = conceptMaps.getLatestMappings(
-        ImmutableSet.of("urn:cerner:map:otherexpmap"),
+        Set.of("urn:cerner:map:otherexpmap"),
         false);
 
     Assert.assertEquals(0, onlyExperimentalMaps.count());

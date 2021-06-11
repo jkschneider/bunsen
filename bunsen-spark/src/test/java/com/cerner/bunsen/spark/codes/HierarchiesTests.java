@@ -4,7 +4,6 @@ import com.cerner.bunsen.spark.codes.Hierarchies.HierarchicalElement;
 import com.cerner.bunsen.spark.codes.systems.Loinc;
 import com.cerner.bunsen.spark.codes.systems.Snomed;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
@@ -81,7 +80,7 @@ public class HierarchiesTests {
         Hierarchies.getHierarchicalElementEncoder());
   }
 
-  private static final Set<Ancestor> ANCESTOR_CLOSURE = ImmutableSet.of(
+  private static final Set<Ancestor> ANCESTOR_CLOSURE = Set.of(
       ancestor("a", "b"),
       ancestor("a", "c"),
       ancestor("a", "d"),
@@ -124,7 +123,7 @@ public class HierarchiesTests {
     List<Ancestor> ancestors = hierarchies.getAncestors().collectAsList();
     List<UrlAndVersion> members = hierarchies.getMembers().collectAsList();
 
-    Set<UrlAndVersion> expected = ImmutableSet.of(
+    Set<UrlAndVersion> expected = Set.of(
         new UrlAndVersion(Loinc.LOINC_HIERARCHY_URI, "2.56"),
         new UrlAndVersion(Snomed.SNOMED_HIERARCHY_URI, "20160901"),
         new UrlAndVersion(HIERARCHY_URI, "1"));

@@ -3,11 +3,11 @@ package com.cerner.bunsen.stu3.codes;
 import com.cerner.bunsen.FhirContexts;
 import com.cerner.bunsen.spark.SparkRowConverter;
 import com.cerner.bunsen.spark.codes.Value;
-import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Set;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.SparkSession;
 import org.hl7.fhir.dstu3.model.ValueSet;
@@ -283,7 +283,7 @@ public class ValueSetsTest {
         .writeToDatabase(database);
 
     Dataset<Value> latest = ValueSets.getFromDatabase(spark, database)
-        .getLatestValues(ImmutableSet.of("urn:cerner:valueset:newvalueset",
+        .getLatestValues(Set.of("urn:cerner:valueset:newvalueset",
             "urn:cerner:valueset:othervalueset"),
             true);
 
@@ -320,7 +320,7 @@ public class ValueSetsTest {
     ValueSets valueSets = ValueSets.getFromDatabase(spark, database);
 
     Dataset<Value> latestWithExperimental = valueSets.getLatestValues(
-        ImmutableSet.of("urn:cerner:valueset:expvalueset"),
+        Set.of("urn:cerner:valueset:expvalueset"),
         true);
 
     // We include experimental versions, so we should see that.
@@ -330,7 +330,7 @@ public class ValueSetsTest {
             .count());
 
     Dataset<Value> latestWithoutExperimental = valueSets.getLatestValues(
-            ImmutableSet.of("urn:cerner:valueset:expvalueset"),
+            Set.of("urn:cerner:valueset:expvalueset"),
             false);
 
     // Version 1 is not experimental, so we should see it.
@@ -341,7 +341,7 @@ public class ValueSetsTest {
 
     // Loading a map with only experimental versions should find nothing.
     Dataset<Value> onlyExperimentalValueSets = valueSets.getLatestValues(
-        ImmutableSet.of("urn:cerner:valueset:otherexpvalueset"),
+        Set.of("urn:cerner:valueset:otherexpvalueset"),
         false);
 
     Assert.assertEquals(0, onlyExperimentalValueSets.count());
